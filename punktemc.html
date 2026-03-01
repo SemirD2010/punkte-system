@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Punktestand</title>
+<style>
+body { background:#111; color:white; font-family:Arial; text-align:center; }
+h1 { color:orange; }
+.container { background:#222; padding:20px; width:350px; margin:100px auto; border-radius:10px; }
+input { padding:8px; margin:5px; width:80%; border-radius:5px; border:none; }
+button { background:orange; border:none; padding:10px; margin:5px; cursor:pointer; border-radius:5px; }
+</style>
+</head>
+<body>
+
+<h1>Punkte Login</h1>
+
+<div class="container" id="loginBox">
+    <input type="text" id="name" placeholder="Name">
+    <input type="text" id="code" placeholder="Zugangscode">
+    <button onclick="login()">Anmelden</button>
+</div>
+
+<div class="container" id="result" style="display:none;"></div>
+
+<script>
+let usersData = [];
+
+fetch("daten.json")
+.then(response => response.json())
+.then(data => {
+    usersData = data;
+});
+
+function login(){
+    const name = document.getElementById("name").value;
+    const code = document.getElementById("code").value;
+
+    const user = usersData.find(u => u.name === name && u.code === code);
+
+    if(user){
+        document.getElementById("loginBox").style.display="none";
+        document.getElementById("result").style.display="block";
+        document.getElementById("result").innerHTML = `
+            <h2>${user.name}</h2>
+            <p>Punkte: ${user.points}</p>
+        `;
+    } else {
+        alert("Falsche Daten!");
+    }
+}
+</script>
+
+</body>
+</html>
